@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="cors, test, validation" name="keywords">
+<meta content="Test CORS" name="description">
+<meta content="CORS testing" name="title">
+<title>CORS test</title>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.4.0/json2html.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  function sendRequest() {
+    const url = document.getElementById("fullUrl").value;
+    const apikey = document.getElementById("apikey").value;
+    console.log(`Url: ${url}`);
+    console.log(`apikey: ${apikey}`);
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', url);
+    xhr.setRequestHeader('x-api-key', apikey)
+    xhr.setRequestHeader('Accept', 'text/csv');
+    xhr.responseType = 'json'
+    xhr.onload = () => {
+      if (xhr.status !== 200) {
+        console.log(`Error ${xhr.status}: ${xhr.statusText}`)
+      } else {
+        const output = document.getElementById('results')
+        let headers = Object.keys(xhr.response[0]).reduce((acc, curr) => acc+`<th>${curr}</th>`, '')
+        let table = xhr.response.reduce((acc, curr) => acc+'<tr>'+Object.values(curr).reduce((acc, c) => acc + `<td>${c}</td>`, '')+'</tr>', '')
+        output.innerHTML = `<table border=1>${headers}${table}</table>`
+        console.log(xhr.response)
+      }
+    }
+    xhr.send()
+  }
+</script>
+<body>
+<h1>Simple CORS test page</h1><br/>
+<p/>
+Request data:
+<p/>
+<label for="fullUrl">Endpoint:</label>
+<input type="text" name="fullUrl" size=50 id="fullUrl"/>
+<br/>
+<label for="apikey">API Key:</label>
+<input type="text" name="apikey" size=50 id="apikey" />
+<br/>
+<button type="button" onclick="sendRequest()">Send</button>
+<br/>
+<h2>Results</h2>
+<div id="results"></div>
+</body>
+
+</html>
