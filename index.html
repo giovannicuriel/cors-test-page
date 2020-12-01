@@ -17,7 +17,7 @@
     console.log(`apikey: ${apikey}`);
     const xhr = new XMLHttpRequest()
     xhr.open('GET', url);
-    xhr.setRequestHeader('x-api-key', apikey)
+    //xhr.setRequestHeader('x-api-key', apikey)
     xhr.setRequestHeader('Accept', 'text/csv');
     xhr.responseType = 'json'
     xhr.onload = () => {
